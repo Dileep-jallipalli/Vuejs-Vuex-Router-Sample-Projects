@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Shopping List App</title>
+  </head>
+  <body>
+    <div id="shopping-list">
+      <div class="header">
+        <h1>{{ header.toLocaleUpperCase() }}</h1>
+        <button v-if = "state === 'default'" class="btn btn-primary" @click="changeState('edit')">Add items</button>
+        <button v-else class="btn btn-cancel" @click="changeState('default')">Cancel</button>
+      </div>
+
+      <div v-if="state ==='edit'" class="add-item-form">
+        <input
+          v-model="newItem"
+          type="text"
+          placeholder="Add Items to Cart"
+          @keyup.enter="saveItem"
+        />
+        <button class="btn btn-primary"  v-bind:disabled="newItem.length === 0" @click="saveItem">Save Me</button>
+      </div>
+      <ul>
+        <li v-for="item in items" :class="[item.purchased ? 'strikeout' : ' ']" > {{ item.label}}</li>
+      </ul>
+      <p v-if="items.length === 0">Nice...!, you have bought all the items</p>
+    </div>
+    <script src="https://unpkg.com/vue"></script>
+    <script>
+      var shoppingList = new Vue({
+        el: "#shopping-list",
+        data: {
+          state: "default",
+          header: " Shopping list app ",
+          newItem: '',
+          items: [
+            {
+              label: '10 party caps',
+              purchased: false, 
+            },
+            {
+              label: '10 bottles',
+              purchased: true, 
+            },
+            {
+              label: '10 cakes',
+              purchased: false, 
+            },
+          ]
+        },
+        methods: {
+          saveItem: function () {
+            this.items.push({
+              label: this.newItem,
+              purchased: false,
+            },);
+            this.newItem = '';
+          },
+          changeState: function (newState) {
+            this.state = newState;
+            this.newItem = ' ';
+          }
+        },
+      });
+    </script>
+  </body>
+</html>
